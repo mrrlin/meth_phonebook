@@ -57,6 +57,28 @@
     };
   };
 
+  const createTable = () => {
+    const table = document.createElement('table');
+    table.classList.add('table', 'table-striped');
+
+    const thead = document.createElement('thead');
+    thead.insertAdjacentHTML('beforeend', `
+      <tr>
+        <th class="delete">Удалить</th>
+        <th>Имя</th>
+        <th>Фамилия</th>
+        <th>Телефон</th>
+      </tr>
+    `);
+
+    const tbody = document.createElement('tbody');
+
+    table.append(thead, tbody);
+    table.tbody = tbody;
+
+    return table;
+  };
+
   const init = (selectorApp, title) => {
     const app = document.querySelector(selectorApp);
     const header = createHeader();
@@ -74,10 +96,11 @@
         text: 'Удалить',
       },
     ]);
+    const table = createTable();
 
     header.headerContainer.append(logo);
 
-    main.mainContainer.append(buttonGroup.btnWrapper);
+    main.mainContainer.append(buttonGroup.btnWrapper, table);
 
     app.append(header, main);
   };
