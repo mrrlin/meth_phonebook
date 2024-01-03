@@ -101,12 +101,14 @@ const data = [
         <th class="filter">Имя</th>
         <th class="filter">Фамилия</th>
         <th>Телефон</th>
+        <th></th>
       </tr>
     `);
 
     const tbody = document.createElement('tbody');
 
     table.append(thead, tbody);
+    table.thead = thead;
     table.tbody = tbody;
 
     return table;
@@ -233,8 +235,8 @@ const data = [
     app.append(header, main, footer);
 
     return {
-      thead: table.thead,
       list: table.tbody,
+      thead: table.thead,
       logo,
       btnAdd: buttonGroup.btns[0],
       btnDel: buttonGroup.btns[1],
@@ -295,7 +297,7 @@ const data = [
 
     thead.addEventListener('click', e => {
       const target = e.target;
-      if (target.contains('.filter')) {
+      if (target.classList.contains('filter')) {
         const order = target.dataset.currentOrder === 'desc' ? 'asc' : 'desc';
         target.dataset.currentOrder = order;
 
