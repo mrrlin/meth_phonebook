@@ -1,4 +1,6 @@
-'use strict';
+import {renderPhoneBook, renderContacts} from './modules/render.js';
+import {getContactData} from './modules/serviceStorage.js';
+import control from './modules/control.js';
 
 const {
   modalControl,
@@ -6,18 +8,9 @@ const {
   // sortRows,
   deleteControl,
   formControl,
-  sortControl,
+  // sortControl,
   // loadContactsFromStorage,
-} = require('./modules/control');
-
-const {
-  renderPhoneBook,
-  renderContacts,
-} = require('./modules/render');
-
-const {
-  getContactData,
-} = require('./modules/serviceStorage');
+} = control;
 
 {
   const init = (selectorApp, title) => {
@@ -25,7 +18,7 @@ const {
     const data = getContactData();
 
     const {
-      thead,
+      // thead,
       list,
       logo,
       btnAdd,
@@ -38,13 +31,13 @@ const {
     // const contacts = getContactData();
     // const allRow = renderContacts(list, contacts);
     const allRow = renderContacts(list, data);
-    renderContacts(list, data);
+    // renderContacts(list, data);
     const {closeModal} = modalControl(btnAdd, formOverlay);
 
     hoverRow(allRow, logo);
     deleteControl(btnDel, list);
     formControl(form, list, closeModal);
-    sortControl(thead);
+    // sortControl(thead);
   };
 
   window.phonebookInit = init;

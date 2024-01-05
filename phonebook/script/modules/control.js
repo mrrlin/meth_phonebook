@@ -1,13 +1,13 @@
-'use strict';
+import * as createTablesRow from './createElements.js';
+import serviceStorage from './serviceStorage';
+// const {
+//   createRow,
+// } = require('./createElements');
 
-const {
-  createRow,
-} = require('./createElements');
-
-const {
-  addContactData,
-  removeContactData,
-} = require('./serviceStorage');
+// const {
+//   addContactData,
+//   removeContactData,
+// } = require('./serviceStorage');
 
 const modalControl = (btnAdd, formOverlay) => {
   const openModal = () => {
@@ -74,13 +74,14 @@ const deleteControl = (btnDel, list) => {
     const target = e.target;
     if (target.closest('.del-icon')) {
       target.closest('.contact').remove();
-      removeContactData(target.dataset.phone);
+      console.log(target);
+      serviceStorage.removeContactData(target.dataset.phone);
     }
   });
 };
 
 const addContactPage = (contact, list) => {
-  list.append(createRow(contact));
+  list.append(createTablesRow(contact));
 };
 
 const formControl = (form, list, closeModal) => {
@@ -90,7 +91,7 @@ const formControl = (form, list, closeModal) => {
 
     const newContact = Object.fromEntries(formData);
     addContactPage(newContact, list);
-    addContactData(newContact);
+    serviceStorage.addContactData(newContact);
 
     form.reset();
     closeModal();
@@ -133,7 +134,7 @@ const formControl = (form, list, closeModal) => {
 //   return contacts;
 // };
 
-module.exports = {
+export default {
   modalControl,
   hoverRow,
   sortRows,
