@@ -1,31 +1,35 @@
 'use strict';
 
-const data = [
-  {
-    name: 'Иван',
-    surname: 'Петров',
-    phone: '+79514545454',
-  },
-  {
-    name: 'Игорь',
-    surname: 'Семёнов',
-    phone: '+79999999999',
-  },
-  {
-    name: 'Семён',
-    surname: 'Иванов',
-    phone: '+79800252525',
-  },
-  {
-    name: 'Мария',
-    surname: 'Попова',
-    phone: '+79876543210',
-  },
-];
-
 {
+  const getStorage = (key) => {
+    const value = localStorage.getItem(key);
+
+    try {
+      return JSON.parse(value);
+    } catch {
+      return value || [];
+    }
+  };
+
+  const setStorage = (key, value) => {
+    const dataPhone = getStorage(key);
+    dataPhone.push(value);
+    localStorage.setItem(key, JSON.stringify(dataPhone));
+  };
+
+  const removeStorage = (key, phone) => {
+    const dataPhone = getStorage(key);
+    const index = dataPhone.findIndex((item) => item.phone === phone);
+    if (index !== -1) {
+      dataPhone.splice(index, 1);
+    }
+    localStorage.setItem(key, JSON.stringify(dataPhone));
+  };
+
   const addContactData = contact => {
-    data.push(contact);
+    setStorage('contact', contact);
+    const dataContact = getStorage('contact');
+    dataContact.push(contact);
   };
 
   const createContainer = () => {
@@ -312,8 +316,10 @@ const data = [
 
     list.addEventListener('click', e => {
       const target = e.target;
+
       if (target.closest('.del-icon')) {
-        target.closest('.contact').remove();
+        const phone = target.closest('.contact').dataset.phone;
+        removeStorage(phone);
       }
     });
   };
@@ -336,6 +342,42 @@ const data = [
     });
   };
 
+  const sortControl = (thead) => {
+    thead.addEventListener('click', e => {
+      const target = e.target;
+      if (target.classList.contains('filterable')) {
+        const order = target.dataset.currentOrder === 'desc' ? 'asc' : 'desc';
+        target.dataset.currentOrder = order;
+
+        const parent = target.parentNode;
+        const columns = parent.querySelectorAll('th');
+        let index;
+        for (let i = 0; i < columns.length; i++) {
+          if (target === columns[i]) {
+            index = i;
+            break;
+          }
+        }
+
+        setStorage('sort', {index, order});
+        sortRows();
+      }
+    });
+  };
+
+  const loadContactsFromStorage = () => {
+    const contacts = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      const value = getStorage(key);
+      if (value.phone) {
+        contacts.push(value);
+      }
+    }
+
+    return contacts;
+  };
+
   const init = (selectorApp, title) => {
     const app = document.querySelector(selectorApp);
 
@@ -350,32 +392,14 @@ const data = [
     } = renderPhoneBook(app, title);
 
     // Функционал
-    const allRow = renderContacts(list, data);
+    const contacts = loadContactsFromStorage();
+    const allRow = renderContacts(list, contacts);
     const {closeModal} = modalControl(btnAdd, formOverlay);
 
     hoverRow(allRow, logo);
     deleteControl(btnDel, list);
     formControl(form, list, closeModal);
-
-    thead.addEventListener('click', e => {
-      const target = e.target;
-      if (target.classList.contains('filter')) {
-        const order = target.dataset.currentOrder === 'desc' ? 'asc' : 'desc';
-        target.dataset.currentOrder = order;
-
-        const parent = target.parentNode;
-        const columns = parent.querySelectorAll('th');
-        let index;
-        for (let i = 0; i < columns.length; i++) {
-          if (target === columns[i]) {
-            index = i;
-            break;
-          }
-        }
-
-        sortRows(index, order);
-      }
-    });
+    sortControl(thead);
   };
 
   window.phonebookInit = init;
