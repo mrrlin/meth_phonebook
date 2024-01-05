@@ -1,6 +1,11 @@
-import {renderPhoneBook, renderContacts} from './modules/render.js';
+import render from './modules/render.js';
 import {getContactData} from './modules/serviceStorage.js';
 import control from './modules/control.js';
+
+const {
+  renderPhoneBook,
+  renderContacts,
+} = render;
 
 const {
   modalControl,
@@ -11,6 +16,7 @@ const {
   // sortControl,
   // loadContactsFromStorage,
 } = control;
+console.log(123);
 
 {
   const init = (selectorApp, title) => {

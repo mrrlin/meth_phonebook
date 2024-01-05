@@ -1,13 +1,14 @@
-import * as createTablesRow from './createElements.js';
-import serviceStorage from './serviceStorage';
-// const {
-//   createRow,
-// } = require('./createElements');
+import createElements from './createElements.js';
+import serviceStorage from './serviceStorage.js';
 
-// const {
-//   addContactData,
-//   removeContactData,
-// } = require('./serviceStorage');
+const {
+  createRow,
+} = createElements;
+
+const {
+  addContactData,
+  removeContactData,
+} = serviceStorage;
 
 const modalControl = (btnAdd, formOverlay) => {
   const openModal = () => {
@@ -22,7 +23,7 @@ const modalControl = (btnAdd, formOverlay) => {
 
   formOverlay.addEventListener('click', e => {
     const target = e.target;
-    if (target === formOverlay || target.classList.closest('.close')) {
+    if (target === formOverlay || target.classList.contains('close')) {
       closeModal();
     }
   });
@@ -74,14 +75,14 @@ const deleteControl = (btnDel, list) => {
     const target = e.target;
     if (target.closest('.del-icon')) {
       target.closest('.contact').remove();
-      console.log(target);
-      serviceStorage.removeContactData(target.dataset.phone);
+      console.log('target', target.dataset.phone);
+      removeContactData(target.dataset.phone);
     }
   });
 };
 
 const addContactPage = (contact, list) => {
-  list.append(createTablesRow(contact));
+  list.append(createRow(contact));
 };
 
 const formControl = (form, list, closeModal) => {
@@ -91,7 +92,7 @@ const formControl = (form, list, closeModal) => {
 
     const newContact = Object.fromEntries(formData);
     addContactPage(newContact, list);
-    serviceStorage.addContactData(newContact);
+    addContactData(newContact);
 
     form.reset();
     closeModal();

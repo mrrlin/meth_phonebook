@@ -1,4 +1,4 @@
-const getContactData = () => (
+export const getContactData = () => (
   localStorage.getItem('phonebook') ?
   JSON.parse(localStorage.getItem('phonebook')) : []);
 
@@ -14,7 +14,10 @@ const addContactData = contact => {
 
 const removeContactData = phone => {
   const data = getContactData('phonebook');
+  console.log('data', data);
   const newData = data.filter(item => item.phone !== phone);
+  console.log('danewDatata', newData);
+
   setContactData(newData);
 };
 

@@ -145,6 +145,7 @@ const createRow = ({name: firstName, surname, phone}) => {
   tdDel.classList.add('delete');
   const buttonDel = document.createElement('button');
   buttonDel.classList.add('del-icon');
+  buttonDel.dataset.phone = phone;
   tdDel.append(buttonDel);
 
   const tdName = document.createElement('td');
